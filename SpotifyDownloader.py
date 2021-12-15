@@ -71,7 +71,8 @@ if __name__ == '__main__':
             print(str(index) + ". " + search_terms)
 
             html = urllib.request.urlopen(
-                "https://www.youtube.com/results?search_query=" + search_terms.replace(' ', '+'))
+                "https://www.youtube.com/results?search_query=" + re.sub(r'[^a-zA-Z0-9\s]', '+', search_terms).replace(
+                    ' ', '+'))
             video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
             youtube_link = "https://www.youtube.com/watch?v=" + video_ids[0]
             # url input from user
