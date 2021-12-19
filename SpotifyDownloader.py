@@ -7,9 +7,9 @@ from pytube import YouTube
 import os
 
 # Authentication
-client_id = 'CLIENT_ID' # Add your own client_id
-client_secret = 'CLIENT_SECRET' #Add your own client secret
-user_id = 'USER_ID' #Add user id
+client_id = 'CLIENT_ID'  # Add your own client_id
+client_secret = 'CLIENT_SECRET'  # Add your own client secret
+user_id = 'USER_ID'  # Add user id
 client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
@@ -27,12 +27,14 @@ def getTrackFeatures(single_id):
     meta = sp.track(single_id)
     name = meta['name']
     artist = meta['album']['artists'][0]['name']
-    return [name, artist]
+    album = meta['album']['name']
+    return [name, album, artist]
 
 
 if __name__ == '__main__':
     playlists_uri_list = []
     playlist_names_list = []
+    playlist_artists_list = []
     playlists = sp.user_playlists(user_id)
     while playlists:
         for current_playlist, playlist in enumerate(playlists['items']):
@@ -67,7 +69,8 @@ if __name__ == '__main__':
         for track in tracks:
             song_name = track[0]
             artist_name = track[1]
-            search_terms = song_name + ' ' + artist_name
+            album_name = track[2]
+            search_terms = song_name + ' ' + artist_name + ' ' + album_name
             print(str(index) + ". " + search_terms)
 
             html = urllib.request.urlopen(
